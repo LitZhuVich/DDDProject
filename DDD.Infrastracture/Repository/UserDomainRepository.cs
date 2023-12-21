@@ -11,7 +11,7 @@ namespace DDD.Infrastructure.Repository
     public class UserDomainRepository : IUserDomainRepository
     {
         private readonly MyDbContext _dbContext;
-        private readonly IDistributedCache _cache;
+        private readonly IDistributedCache _cache; // 分布式缓存
         private readonly IMediator _mediator;
         public UserDomainRepository(MyDbContext dbContext, IDistributedCache cache, IMediator mediator)
         {

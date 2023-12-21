@@ -9,7 +9,7 @@ namespace DDD.Infrastructure
         public DbSet<User> Users { get; set; }
         public DbSet<UserLoginHistory> UserLoginHistories { get; set; }
 
-        protected MyDbContext(DbContextOptions<MyDbContext> opt) : base(opt)
+        public MyDbContext(DbContextOptions<MyDbContext> opt) : base(opt)
         {
             
         }
