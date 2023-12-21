@@ -1,6 +1,12 @@
-﻿namespace DDD.Domain.Result
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DDD.Domain.Results
 {
-    public enum UserAccessResult
+    public enum CheckCodeResult
     {
         /// <summary>
         /// 返回成功
@@ -15,13 +21,8 @@
         /// </summary>
         Lockout,
         /// <summary>
-        /// 没有密码
+        /// 验证码错误
         /// </summary>
-        NoPassword,
-        /// <summary>
-        /// 密码错误
-        /// </summary>
-        PasswordError
+        CodeError
     }
-
 }

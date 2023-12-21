@@ -3,26 +3,12 @@
     public record UserAccessFail
     {
         public Guid Id { get; init; }
-        /// <summary>
-        /// 用户
-        /// </summary>
-        public User? User { get; init; }
-        /// <summary>
-        /// 用户ID
-        /// </summary>
-        public Guid UserId { get; init; }
-        /// <summary>
-        /// 是否被锁定
-        /// </summary>
-        public bool isLockOut;
-        /// <summary>
-        /// 锁定结束日期
-        /// </summary>
-        public DateTime? LockoutEnd { get; private set; }
-        /// <summary>
-        /// 锁定次数
-        /// </summary>
-        public int AccessFailedCount { get; private set; }
+        public User? User { get; init; } // 用户
+        public Guid UserId { get; init; } // 用户ID
+
+        public bool isLockOut; // 是否被锁定
+        public DateTime? LockoutEnd { get; private set; } // 锁定结束日期
+        public int AccessFailedCount { get; private set; } // 锁定次数
         private UserAccessFail() { }
         public UserAccessFail(User user)
         {

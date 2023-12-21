@@ -1,24 +1,15 @@
-﻿using DDD.Domain.Helpers;
-using DDD.Domain.ValueObjects;
+﻿using DDD.Domain.ValueObjects;
 
 namespace DDD.Domain.Entitles
 {
-    public record User
+    public record User : IAggregateRoot
     {
         public Guid Id { get; init; }
-        /// <summary>
-        /// 手机号
-        /// </summary>
-        public PhoneNumber? PhoneNumber { get; private set; }
-        /// <summary>
-        /// 密码散列值
-        /// </summary>
-        public string passwordHash = "";
-        /// <summary>
-        /// 用户状态
-        /// </summary>
-        public UserAccessFail UserAccessFail { get; private set; }
+        public PhoneNumber PhoneNumber { get; private set; } // 手机号
 
+        public string passwordHash = ""; // 密码散列值
+        public UserAccessFail UserAccessFail { get; private set; } // 用户状态
+        private User() { }
         public User(PhoneNumber phoneNumber) 
         {
             PhoneNumber = phoneNumber;
@@ -33,7 +24,11 @@ namespace DDD.Domain.Entitles
         {
             return string.IsNullOrEmpty(passwordHash);
         }
-
+        /// <summary>
+        /// 检查密码是否正确
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public bool CheckPassword(string password)
         {
             return passwordHash == HashHelper.ComputeMd5Hash(password);
