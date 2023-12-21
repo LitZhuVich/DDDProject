@@ -39,7 +39,7 @@ namespace DDD.Domain.Entitles
         /// <exception cref="ArgumentOutOfRangeException">密码必须大于3</exception>
         public void ChangePassword(string password)
         {
-            if (passwordHash.Length<=3)
+            if (password.Length <= 3)
             {
                 throw new ArgumentOutOfRangeException("密码必须大于3");
             }

@@ -33,13 +33,13 @@ namespace DDD.Infrastructure.Repository
 
         public async Task<User?> FindOneAsync(PhoneNumber phoneNumber)
         {
-            User? user = await _dbContext.Users.SingleOrDefaultAsync(ExpressionHelper.MakeEqual((User u) => u.PhoneNumber,phoneNumber));
+            User? user = await _dbContext.Users.Include(u=>u.UserAccessFail).SingleOrDefaultAsync(ExpressionHelper.MakeEqual((User u) => u.PhoneNumber,phoneNumber));
             return user;
         }
 
         public async Task<User?> FindOneAsync(Guid userId)
         {
-            User? user = await _dbContext.Users.SingleOrDefaultAsync(u=>u.Id == userId);
+            User? user = await _dbContext.Users.Include(u => u.UserAccessFail).SingleOrDefaultAsync(u=>u.Id == userId);
             return user;
         }
 

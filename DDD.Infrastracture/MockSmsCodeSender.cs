@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DDD.Infrastructure
 {
-    public class MockSmsSender : ISmsCodeSender
+    public class MockSmsCodeSender : ISmsCodeSender
     {
         public Task SendCodeAsync(PhoneNumber phoneNumber, string code)
         {
