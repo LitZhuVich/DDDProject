@@ -1,7 +1,7 @@
 ﻿using System.Security.Cryptography;
 using System.Text;
 
-namespace DDD.Domain.Helpers
+namespace DDD.Domain
 {
     public static class HashHelper
     {

@@ -1,4 +1,6 @@
 ﻿using DDD.Domain.Entitles;
+using DDD.Domain.Result;
+using DDD.Domain.ResultEvents;
 using DDD.Domain.ValueObjects;
 
 namespace DDD.Domain.Repository
@@ -24,7 +26,12 @@ namespace DDD.Domain.Repository
         /// <param name="msg"></param>
         /// <returns></returns>
         Task AddNewLoginHistoryAsync(PhoneNumber phoneNumber, string msg);
-        //Task PublishEventAsync(UserAccessResultEvent eventData);
+        /// <summary>
+        /// 领域事件的发布
+        /// </summary>
+        /// <param name="userAccessResultEvent"></param>
+        /// <returns></returns>
+        Task PublishEventAsync(UserAccessResultEvent userAccessResultEvent);
         /// <summary>
         /// 保存手机号对应验证码
         /// </summary>
@@ -33,7 +40,7 @@ namespace DDD.Domain.Repository
         /// <returns></returns>
         Task SavePhoneNumberCodeAsync(PhoneNumber phoneNumber, string code);
         /// <summary>
-        /// 获取手机验证码
+        /// 获取手机验证码，验证码可能不存在
         /// </summary>
         /// <param name="phoneNumber"></param>
         /// <returns></returns>
