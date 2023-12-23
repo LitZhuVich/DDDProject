@@ -31,9 +31,16 @@ namespace DDD.Infrastructure.Repository
             _dbContext.UserLoginHistories.Add(new UserLoginHistory(userId, phoneNumber, msg));
         }
 
+        public async Task<List<User>> FindAllAsync()
+        {
+            List<User> users = await _dbContext.Users.Include(u => u.UserAccessFail).ToListAsync();
+
+            return users;
+        }
+
         public async Task<User?> FindOneAsync(PhoneNumber phoneNumber)
         {
-            User? user = await _dbContext.Users.Include(u=>u.UserAccessFail).SingleOrDefaultAsync(ExpressionHelper.MakeEqual((User u) => u.PhoneNumber,phoneNumber));
+            User? user = await _dbContext.Users.Include(u => u.UserAccessFail).SingleOrDefaultAsync(ExpressionHelper.MakeEqual((User u) => u.PhoneNumber,phoneNumber));
             return user;
         }
 
@@ -46,8 +53,8 @@ namespace DDD.Infrastructure.Repository
         public async Task<string?> FindPhoneNumberCodeAsync(PhoneNumber phoneNumber)
         {
             string key = $"PhoneNumberCode_{phoneNumber.RegionNumber}_{phoneNumber.Tel}";
-            string? code = await _cache.GetStringAsync(key); // 根据key获取验证码
-            _cache.Remove(key);// 删除key
+            string? code = await _cache.GetStringAsync(key); // 根据 key 获取验证码
+            _cache.Remove(key);// 删除 key
             return code;
         }
 
@@ -59,6 +66,7 @@ namespace DDD.Infrastructure.Repository
         public Task SavePhoneNumberCodeAsync(PhoneNumber phoneNumber, string code)
         {
             string key = $"PhoneNumberCode_{phoneNumber.RegionNumber}_{phoneNumber.Tel}";
+            
             // 设置： key, value, 过期时间(5分钟
             return _cache.SetStringAsync(key,code,new DistributedCacheEntryOptions
             {

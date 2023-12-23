@@ -13,41 +13,31 @@ namespace DDD.Domain.Services
         /// 注入仓储
         /// </summary>
         private readonly IUserDomainRepository _userDomainRepository;
-        /// <summary>
-        /// 注入防腐层发送短信接口
-        /// </summary>
-        private readonly ISmsCodeSender _smsSender;
 
-        public UserDomainService(IUserDomainRepository userDomainRepository, ISmsCodeSender smsSender)
+        public UserDomainService(IUserDomainRepository userDomainRepository)
         {
             _userDomainRepository = userDomainRepository;
-            _smsSender = smsSender;
         }
+
         /// <summary>
         /// 重置错误信息
         /// </summary>
         /// <param name="user"></param>
-        public void ResetAccessFail(User? user)
-        {
-            user?.UserAccessFail.Reset();
-        }
+        public static void ResetAccessFail(User? user) => user?.UserAccessFail.Reset();
+
         /// <summary>
         /// 是否被锁定
         /// </summary>
         /// <param name="user"></param>
         /// <returns></returns>
-        public bool IsLockOut(User user)
-        {
-            return user.UserAccessFail.IsLockOut();
-        }
+        public static bool IsLockOut(User user) => user.UserAccessFail.IsLockOut();
+
         /// <summary>
         /// 处理一次“登陆失败”
         /// </summary>
         /// <param name="user"></param>
-        public void AccessFail(User? user)
-        {
-            user?.UserAccessFail.Fail();
-        }
+        public static void AccessFail(User? user) => user?.UserAccessFail.Fail();
+
         /// <summary>
         /// 检查手机号对应的密码
         /// </summary>
@@ -93,7 +83,13 @@ namespace DDD.Domain.Services
             await _userDomainRepository.PublishEventAsync(new UserAccessResultEvent(phoneNumber, result));
             return result;
         }
-   
+
+        /// <summary>
+        /// 检查验证码
+        /// </summary>
+        /// <param name="phoneNumber"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
         public async Task<CheckCodeResult> CheckPhoneNumberAsync(PhoneNumber phoneNumber,string code)
         {
             var user = await _userDomainRepository.FindOneAsync(phoneNumber);
