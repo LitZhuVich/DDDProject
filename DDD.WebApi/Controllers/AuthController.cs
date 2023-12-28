@@ -59,7 +59,8 @@ namespace DDD.WebApi.Controllers
         public async Task<IActionResult> CheckSmsCode(CheckSmsCodeRequest req)
         {
             var result = await _userDomainService.CheckPhoneNumberAsync(req.PhoneNumber,req.code);
-
+            Console.WriteLine(req);
+            Console.WriteLine(result);
             switch (result)
             {
                 case CheckCodeResult.Ok:

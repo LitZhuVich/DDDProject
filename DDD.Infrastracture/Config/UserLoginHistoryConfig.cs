@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-
 namespace DDD.Infrastructure.Config
 {
     public class UserLoginHistoryConfig : IEntityTypeConfiguration<UserLoginHistory>
@@ -14,6 +13,8 @@ namespace DDD.Infrastructure.Config
             {
                 nb.Property(b => b.Tel).HasMaxLength(20).IsUnicode(false);
             });
+
+            builder.HasIndex(x => x.UserId).HasDatabaseName("IX_UserId");
         }
     }
 }

@@ -6,12 +6,11 @@ namespace DDD.Domain.Entitles
     {
         public Guid Id { get; init; }
         public string? UserName { get; set; }
-        public bool IsDeleted { get; set; }
         public PhoneNumber PhoneNumber { get; private set; } // 手机号
 
-        public string passwordHash = ""; // 密码散列值
+        private string passwordHash = ""; // 密码散列值
         public UserAccessFail UserAccessFail { get; private set; } // 用户状态
-        private User() { }
+        private User() {}
         public User(PhoneNumber phoneNumber) 
         {
             PhoneNumber = phoneNumber;

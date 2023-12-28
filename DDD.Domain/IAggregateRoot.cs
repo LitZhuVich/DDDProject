@@ -1,4 +1,6 @@
-﻿namespace DDD.Domain
+﻿using DDD.Domain.Entitles;
+
+namespace DDD.Domain
 {
     /// <summary>
     /// 使用该接口的代表为聚合根

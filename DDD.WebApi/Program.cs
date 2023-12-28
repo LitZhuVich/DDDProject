@@ -6,9 +6,9 @@ using DDD.Infrastructure.Repository;
 using DDD.WebApi.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NLog.Extensions.Logging;
 
 var builder = WebApplication.CreateBuilder(args);
-
 // Add services to the container.
 
 builder.Services.AddControllers().AddNewtonsoftJson(opt =>
@@ -22,19 +22,30 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<MyDbContext>(o =>
 {
-    o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    o.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection"));
 });
 
+// 日志
+builder.Services.AddLogging(builder =>
+{
+    //builder.AddConsole();
+    builder.AddNLog();
+    // 设置最低输出级别的信息
+    builder.SetMinimumLevel(LogLevel.Debug);
+});
 builder.Services.Configure<MvcOptions>(o =>
 {
     o.Filters.Add<UnitOfWorkFilter>();
     o.Filters.Add<ApiResponseFilter>();
 });
+
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddScoped<UserDomainService>();
 builder.Services.AddDistributedMemoryCache();
 builder.Services.AddScoped<IUserDomainRepository,UserDomainRepository>();
 builder.Services.AddScoped<ISmsCodeSender,MockSmsCodeSender>();
+// AutoMapper
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 var app = builder.Build();
 

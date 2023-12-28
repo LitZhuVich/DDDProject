@@ -13,13 +13,14 @@ namespace DDD.Infrastructure.Repository
         private readonly MyDbContext _dbContext;
         private readonly IDistributedCache _cache; // 分布式缓存
         private readonly IMediator _mediator;
+
         public UserDomainRepository(MyDbContext dbContext, IDistributedCache cache, IMediator mediator)
         {
             _dbContext = dbContext;
             _cache = cache;
             _mediator = mediator;
         }
-
+            
         public async Task AddNewLoginHistoryAsync(PhoneNumber phoneNumber, string msg)
         {
             User? user = await FindOneAsync(phoneNumber);
@@ -54,6 +55,7 @@ namespace DDD.Infrastructure.Repository
         {
             string key = $"PhoneNumberCode_{phoneNumber.RegionNumber}_{phoneNumber.Tel}";
             string? code = await _cache.GetStringAsync(key); // 根据 key 获取验证码
+            Console.WriteLine(code);
             _cache.Remove(key);// 删除 key
             return code;
         }
@@ -66,7 +68,7 @@ namespace DDD.Infrastructure.Repository
         public Task SavePhoneNumberCodeAsync(PhoneNumber phoneNumber, string code)
         {
             string key = $"PhoneNumberCode_{phoneNumber.RegionNumber}_{phoneNumber.Tel}";
-            
+            Console.WriteLine(key);
             // 设置： key, value, 过期时间(5分钟
             return _cache.SetStringAsync(key,code,new DistributedCacheEntryOptions
             {

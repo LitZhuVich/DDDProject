@@ -19,11 +19,10 @@ namespace DDD.Infrastructure.Config
             // 配置UserAccessFail属性
             builder.HasOne(b => b.UserAccessFail).WithOne(f => f.User)
                 // 设置外键UserId
-                .HasForeignKey<UserAccessFail>(f => f.UserId);
-            // 设置passwordHash属性最大长度为100，且不可为 unicode
+                .HasForeignKey<UserAccessFail>(f => f.UserId)
+                .OnDelete(DeleteBehavior.Restrict);
+            // 设置 passwordHash 属性最大长度为100，且不可为 unicode
             builder.Property("passwordHash").HasMaxLength(100).IsUnicode(false);
-            // 设置查询过滤器，只查询未删除的数据
-            builder.HasQueryFilter(b => b.IsDeleted == false);
         }
     }
 }
