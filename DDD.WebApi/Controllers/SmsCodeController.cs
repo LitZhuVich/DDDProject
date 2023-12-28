@@ -14,18 +14,23 @@ namespace DDD.WebApi.Controllers
         /// 注入防腐层发送短信接口
         /// </summary>
         private readonly ISmsCodeSender _smsSender;
-
-        public SmsCodeController(ISmsCodeSender smsSender)
+        private readonly IUserDomainRepository _userDomainRepository;
+        public SmsCodeController(ISmsCodeSender smsSender, IUserDomainRepository userDomainRepository)
         {
             _smsSender = smsSender;
+            _userDomainRepository = userDomainRepository;
         }
-        
+
         [HttpPost("Send")]
         public async Task<ActionResult<SmsCodeDto>> Send(PhoneNumber PhoneNumber)
         {
+            var user = await _userDomainRepository.FindOneAsync(PhoneNumber);
+            if (user == null)
+            {
+                return BadRequest("找不到手机号");
+            }
             string code = await _smsSender.SendCodeAsync(PhoneNumber);
             return new SmsCodeDto { Code = code };
         }
-
     }
 }
