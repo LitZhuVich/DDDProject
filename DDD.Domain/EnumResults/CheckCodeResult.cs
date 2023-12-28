@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DDD.Domain.Results
+namespace DDD.Domain.EnumResults
 {
     public enum CheckCodeResult
     {

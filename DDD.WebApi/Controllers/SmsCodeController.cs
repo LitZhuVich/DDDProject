@@ -1,6 +1,7 @@
 ﻿using DDD.Domain;
 using DDD.Domain.Repository;
 using DDD.Domain.ValueObjects;
+using DDD.WebApi.Dto;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DDD.WebApi.Controllers
@@ -18,15 +19,13 @@ namespace DDD.WebApi.Controllers
         {
             _smsSender = smsSender;
         }
-
+        
         [HttpPost("Send")]
-        public async Task<IActionResult> Send(PhoneNumber PhoneNumber)
+        public async Task<ActionResult<SmsCodeDto>> Send(PhoneNumber PhoneNumber)
         {
             string code = await _smsSender.SendCodeAsync(PhoneNumber);
-            return Ok(new SmsCodeResponse(code));
+            return new SmsCodeDto { Code = code };
         }
 
     }
-
-    public record SmsCodeResponse(string code);
 }
