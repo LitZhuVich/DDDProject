@@ -1,6 +1,6 @@
 ﻿using DDD.Domain.Repository;
 using DDD.Domain.Result;
-using DDD.Domain.Results;
+using DDD.Domain.EnumResults;
 using DDD.Domain.Services;
 using DDD.Domain.ValueObjects;
 using DDD.Infrastructure;

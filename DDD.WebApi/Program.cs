@@ -7,6 +7,7 @@ using DDD.WebApi.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NLog.Extensions.Logging;
+using StackExchange.Redis;
 
 var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
@@ -24,7 +25,14 @@ builder.Services.AddDbContext<MyDbContext>(o =>
 {
     o.UseSqlServer(builder.Configuration.GetConnectionString("SqlServerConnection"));
 });
+// Redis : private readonly ConnectionMultiplexer _Redis;
+builder.Services.AddSingleton(provider =>
+{
+    string? conn = builder.Configuration.GetConnectionString("RedisConnection");
 
+    var configuration = ConfigurationOptions.Parse(conn);
+    return ConnectionMultiplexer.Connect(configuration);
+});
 // 日志
 builder.Services.AddLogging(builder =>
 {
@@ -33,19 +41,22 @@ builder.Services.AddLogging(builder =>
     // 设置最低输出级别的信息
     builder.SetMinimumLevel(LogLevel.Debug);
 });
+// 拦截器
 builder.Services.Configure<MvcOptions>(o =>
 {
     o.Filters.Add<UnitOfWorkFilter>();
     o.Filters.Add<ApiResponseFilter>();
 });
-
+// 依赖注入
 builder.Services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(Program).Assembly));
 builder.Services.AddScoped<UserDomainService>();
-builder.Services.AddDistributedMemoryCache();
 builder.Services.AddScoped<IUserDomainRepository,UserDomainRepository>();
 builder.Services.AddScoped<ISmsCodeSender,MockSmsCodeSender>();
+// 缓存
+builder.Services.AddDistributedMemoryCache();
 // AutoMapper
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
 
 var app = builder.Build();
 
